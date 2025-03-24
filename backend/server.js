@@ -11,10 +11,10 @@ app.use(cors());
 
 // Database Configuration
 const config = {
-  user: 'DB1',
-  password: 'Whitebeard@23',
-  server: 'hpfa1.database.windows.net',
-  database: 'HPFA_DB1', 
+  user: 'madhu',
+  password: 'Healthcarefeedback#',
+  server: 'healthfeedbacksqldb.database.windows.net',
+  database: 'hfdb', 
   options: {
     encrypt: true,
     enableArithAbort: true
