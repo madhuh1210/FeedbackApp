@@ -21,6 +21,22 @@ const config = {
   }
 };
 
+const mssql = require("mssql");  
+let pool;
+
+async function connectToDatabase() {
+  try {
+    pool = await mssql.connect(config);
+    console.log("✅ Database connected successfully!");
+  } catch (err) {
+    console.error("❌ Database connection failed:", err);
+    process.exit(1);  // Exit the app if connection fails
+  }
+}
+
+connectToDatabase();
+
+
 // Email Configuration for Alerts
 const transporter = nodemailer.createTransport({
   service: 'gmail',
