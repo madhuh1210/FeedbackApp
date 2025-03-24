@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mssql = require("mssql"); // ✅ Keep only this import
+const mssql = require("mssql");
 const cors = require("cors");
 const Sentiment = require("sentiment");
 const nodemailer = require("nodemailer");
@@ -14,7 +14,7 @@ const config = {
   user: 'madhu',
   password: 'Healthcarefeedback#',
   server: 'healthfeedbacksqldb.database.windows.net',
-  database: 'hfdb', 
+  database: 'hfdb',
   options: {
     encrypt: true,
     enableArithAbort: true
@@ -23,14 +23,14 @@ const config = {
 
 let pool;
 
-// ✅ Keep only this function
+// Function to Connect to Database
 async function connectToDatabase() {
   try {
-    pool = await mssql.connect(config);  
+    pool = await mssql.connect(config);
     console.log("✅ Database connected successfully!");
   } catch (err) {
     console.error("❌ Database connection failed:", err);
-    process.exit(1); 
+    process.exit(1);
   }
 }
 
@@ -38,8 +38,8 @@ async function connectToDatabase() {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'your-email@gmail.com', // Replace with your email
-    pass: 'your-app-specific-password' // Replace with app-specific password
+    user: 'madhuh1210@gmail.com', // Updated email
+    pass: 'your-app-specific-password' // Use an App Password for security
   }
 });
 
@@ -48,8 +48,8 @@ const sentiment = new Sentiment();
 // Function to send email alert for negative feedback
 async function sendNegativeFeedbackAlert(feedback, name, email) {
   const mailOptions = {
-    from: 'get.pranavk23@gmail.com',
-    to: 'getpranav2@gmail.com', // Replace with admin email
+    from: 'madhuh1210@gmail.com', // Updated email
+    to: 'madhuh1210@gmail.com', // Send alerts to your email
     subject: 'Negative Feedback Alert',
     text: `Negative feedback received from ${name} (${email}):\n\n"${feedback}"`
   };
@@ -82,7 +82,7 @@ app.post("/feedback", async (req, res) => {
     sentimentScore = sentimentResult.score;
     sentimentLabel = sentimentScore > 0 ? "Positive" : sentimentScore < 0 ? "Negative" : "Neutral";
 
-    // DB Connection is Active
+    // Ensure DB Connection is Active
     if (!pool) {
       return res.status(500).send({
         success: false,
