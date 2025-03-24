@@ -20,8 +20,7 @@ const config = {
     enableArithAbort: true
   }
 };
-
-const mssql = require("mssql");  
+  
 let pool;
 
 async function connectToDatabase() {
