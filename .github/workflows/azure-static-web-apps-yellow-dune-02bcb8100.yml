@@ -22,33 +22,32 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'  # Cache npm dependencies to speed up builds
-          cache-dependency-path: frontend/package-lock.json  # Cache based on frontend package-lock.json
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install Frontend Dependencies
-        run: npm install
         working-directory: ./frontend
+        run: npm install
 
       - name: Run Frontend Tests
-        run: npm test --if-present -- --watchAll=false  # Run all tests, not just those related to changed files
         working-directory: ./frontend
-        continue-on-error: true  # Continue even if tests fail (remove this later when tests are stable)
+        run: npm test --if-present -- --watchAll=false
+        continue-on-error: true
         env:
-          NODE_OPTIONS: "--no-deprecation"  # Suppress punycode deprecation warning
+          NODE_OPTIONS: "--no-deprecation"
 
       - name: Build Frontend
-        run: npm run build
         working-directory: ./frontend
+        run: npm run build
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "./frontend"
-          output_location: "frontend/build"
+          output_location: "build"
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -63,23 +62,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'  # Cache npm dependencies to speed up builds
-          cache-dependency-path: backend/package-lock.json  # Cache based on backend package-lock.json
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
 
       - name: Install Backend Dependencies
-        run: npm install
         working-directory: ./backend
+        run: npm install
 
       - name: Run Backend Tests
-        run: npm test --if-present -- --watchAll=false  # Run all tests, not just those related to changed files
         working-directory: ./backend
-        continue-on-error: true  # Continue even if tests fail (remove this later when tests are stable)
+        run: npm test --if-present -- --watchAll=false
+        continue-on-error: true
         env:
-          NODE_OPTIONS: "--no-deprecation"  # Suppress punycode deprecation warning
+          NODE_OPTIONS: "--no-deprecation"
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'feedbackapp-backend'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: './backend'
+          package: backend/
